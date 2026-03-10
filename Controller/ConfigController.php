@@ -4,7 +4,6 @@
  */
 namespace oliverde8\ComfySyliusAdminBundle\Controller;
 
-use oliverde8\ComfyBundle\Exception\UnknownScopeException;
 use oliverde8\ComfyBundle\Form\Type\ConfigsForm;
 use oliverde8\ComfyBundle\Manager\ConfigDisplayManager;
 use oliverde8\ComfyBundle\Resolver\ScopeResolverInterface;
@@ -13,35 +12,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ConfigController extends AbstractController
 {
-    protected VisibleConfigsResolver $visibleConfigsResolver;
-    protected ScopeResolverInterface $scopeResolver;
-    protected ConfigDisplayManager $configDisplayManager;
-
-    /**
-     * ConfigController constructor.
-     *
-     * @param VisibleConfigsResolver $visibleConfigsResolver
-     * @param ScopeResolverInterface $scopeResolver
-     * @param ConfigDisplayManager $configDisplayManager
-     */
     public function __construct(
-        VisibleConfigsResolver $visibleConfigsResolver,
-        ScopeResolverInterface $scopeResolver,
-        ConfigDisplayManager $configDisplayManager
-    )
-    {
-        $this->visibleConfigsResolver = $visibleConfigsResolver;
-        $this->scopeResolver = $scopeResolver;
-        $this->configDisplayManager = $configDisplayManager;
+        protected VisibleConfigsResolver $visibleConfigsResolver,
+        protected ScopeResolverInterface $scopeResolver,
+        protected ConfigDisplayManager $configDisplayManager
+    ) {
     }
 
-    /**
-     * @Route("/comfy/configs", name="sylius_admin_comfy_config")
-     */
+    #[Route('/comfy/configs', name: 'sylius_admin_comfy_config')]
     public function index(Request $request): Response
     {
         $scope = $this->getConfigScopeFromRequest($request);
@@ -81,12 +63,10 @@ class ConfigController extends AbstractController
      *
      * @param Request $request
      * @return string
-     *
-     * @throws UnknownScopeException
      */
     protected function getConfigPathFromRequest(Request $request): string
     {
-        $configPath = $request->get('config', null);
+        $configPath = $request->query->get('config', null);
         $configPath = str_replace(".", "/", $configPath);
         $configPath = ltrim($configPath, '/');
 
@@ -108,7 +88,7 @@ class ConfigController extends AbstractController
      */
     protected function getConfigScopeFromRequest(Request $request): string
     {
-        $scope = $this->scopeResolver->getScope($request->get("scope", null));
+        $scope = $this->scopeResolver->getScope($request->query->get("scope", null));
 
         if (!$this->scopeResolver->validateScope($scope)) {
             throw new NotFoundHttpException("Unknown scope.");

@@ -15,41 +15,14 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ChannelScopeResolver extends AbstractScopeResolver implements ScopeResolverInterface
 {
-    protected ChannelRepository $channelRepository;
-
-    protected ChannelContextInterface $channelContext;
-
-    protected LocaleContextInterface $localeContext;
-
-    protected RequestStack $request;
-
-    protected string $defaultScope;
-
-    protected string $defaultScopeName;
-
-    /**
-     * ChannelScopeResolver constructor.
-     * @param ChannelRepository $channelRepository
-     * @param ChannelContextInterface $channelContext
-     * @param LocaleContextInterface $localeContext
-     * @param RequestStack $request
-     * @param string $defaultScope
-     * @param string $defaultScopeName
-     */
     public function __construct(
-        ChannelRepository $channelRepository,
-        ChannelContextInterface $channelContext,
-        LocaleContextInterface $localeContext,
-        RequestStack $request,
-        string $defaultScope,
-        string $defaultScopeName
+        protected ChannelRepository $channelRepository,
+        protected ChannelContextInterface $channelContext,
+        protected LocaleContextInterface $localeContext,
+        protected RequestStack $request,
+        protected string $defaultScope,
+        protected string $defaultScopeName
     ) {
-        $this->channelRepository = $channelRepository;
-        $this->channelContext = $channelContext;
-        $this->localeContext = $localeContext;
-        $this->request = $request;
-        $this->defaultScope = $defaultScope;
-        $this->defaultScopeName = $defaultScopeName;
     }
 
     /**

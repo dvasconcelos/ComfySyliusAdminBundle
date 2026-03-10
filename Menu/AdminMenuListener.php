@@ -10,16 +10,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AdminMenuListener
 {
-    protected FactoryInterface $factory;
-
-    protected TranslatorInterface $translator;
-
     public function __construct(
-        FactoryInterface $factory,
-        TranslatorInterface $translator
+        protected FactoryInterface $factory,
+        protected TranslatorInterface $translator
     ) {
-        $this->factory = $factory;
-        $this->translator = $translator;
     }
 
     /**
